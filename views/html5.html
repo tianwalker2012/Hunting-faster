@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+<head>
+<meta charset=utf-8>
+<title>html5 test page</title>
+<link href="/public/html5.css" type="text/css" rel="stylesheet"/> 
+<style type="text/css">
+  body {
+  background-color:#00cc00;
+  width:100%;
+  }
+  header {
+  width:100%;
+  }
+  nav {
+  float: left;
+  width: 20%;
+  }
+  article {
+  float: right;
+  width: 80%;
+  }
+  footer {
+  clear: both;
+  width:100%;
+  }
+.inline {
+  display: inline;
+}
+
+article>.inline {
+  background-color: #ddd;
+}
+
+article>.block {
+  background-color: #aadddd;
+  text-align: center;
+}
+.block {
+  display: block;
+}
+</style>
+<script>
+  
+</script>
+</head>
+<body>
+<header>
+  Hi I am a header, it is my honor to be here
+  <hgroup>
+    <h1>我是头一</h1>
+    <h2>我是头二</h2>
+    <h1>我是头三</h1>
+    <h1>我是头四</h1>
+  </hgroup>
+  <nav>
+    <ul>
+      <li>Home</li>
+      <li>Product</li>
+      <li>About us</li>
+    </ul>
+    <ol>
+      <li>我的家</li>
+      <li>在东北松花江</li>
+      <li>水泊梁山</li>
+    </ol>
+  </nav>
+
+</header>
+<nav>
+  Nav bar is here. I wish you could see me
+</nav>
+<article>
+ <div class="inline">
+   我是inline
+ </div>
+ <div class="inline">
+   我也是inline
+ </div>
+我不是inline也不是Block
+ <div class="block">
+   我是Block
+ </div>
+ <div class="block">
+   我也是Block
+ </div>
+ <blockquote>
+   我是一个BlockQuote, single line
+ </blockquote>
+ <blockquote>
+   我是一个BlockQuote
+   Double line
+   I want to know what's the difference between blockquote and a simple div
+ </blockquote>
+白雪公主白又白，两只耳朵竖起来
+</article>
+<article>
+  你说的是兔子还是公主，不要把兔子当公主也不要把公主当兔子呵呵
+  <time datetime=2012-01-03>The first working day 2012</time>
+</article>
+<footer>
+  故事结束了，可是爱情仍在继续
+  <div id="debug">
+    
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<style type="text/css">
+	.search {
+		border:2px inset #F92;
+		width: 480px;
+	}
+	
+	.hover {
+	  background-color: #00dddd;
+	}
+	
+	.interwave {
+	  background-color: #eee	;
+	}
+	
+	.introduce {
+	  padding: 12px 0 7px 0;
+      color: #666;
+	}
+	
+	
+</style>
+<script type="text/javascript">
+  function debug(env){
+    $("#debug").append("<div>"+env+"</div>");
+  }
+  
+
+  //function goto(page){
+  //  debug("Try to jump to:"+page);	
+  //}
+  $(document).ready(
+  function(){
+    $(".result-item:even").addClass("interwave");
+    $(".guide:even").addClass("interwave");
+    //<% if(binds.searchResult) { %>
+    //debug("document length: <%= binds.searchResult.response.docs.length %>");
+    //<% } %>
+ });
+
+ </script>
+ <% //This are server side code, not sure if the it can refer to server side variable or not. Just try
+  var salarySort = binds.salarySort || "asc";
+  var ageSort = binds.ageSort || "asc";
+  var careerAgeSort = binds.careerAgeSort || "asc";
+  var currentCondition = binds.currentCondition || "AND";
+  var currentSort = binds.currentSort || "relative";
+
+  var messageMap = {
+	salarySortAsc: "薪水顺序",
+	salarySortDesc: "薪水倒序",
+	ageSortAsc: "年龄顺序",
+	ageSortDesc: "年龄倒序",
+	careerAgeSortAsc: "职业年龄顺序",
+	careerAgeSortDesc: "职业年龄顺序",
+	relative: "搜索相关性排序"
+  }  
+  %>
+<div class="container">
+  <div class="introduce">
+    <font size="4">
+     <table>
+     <tbody>
+     <tr class="guide">
+      <td>查询功能使用的例子</td> <td></td>
+     </tr>
+     <tr class="guide">
+     <td>如果你要找技能里会c++的人</td><td><pre>skill_set:c++<pre></td> 
+     </tr>
+     <tr class="guide">
+     <td>如果你要找同时会c++,java的人你的查询条件是：</td> <td><pre>skill_set:c++   skill_set:java</pre> </td>
+     </tr>
+     <tr class="guide">
+      <td>如果你的条件是c++或是java随便会一样就可以<br/>那你的查询条件是:</td> <td><pre>skill_set:c++  OR  skill_set:java</pre></td>
+      </tr>
+     <tr class="guide">
+     <td>如果你想找年龄35以上，在百度工作，java，程序员<br/>你的查询条件是:</td> <td><pre>age:[35 TO *] company:百度 title:程序员 skill_set:java </pre></td>
+     </tr>
+     <tr class="guide">
+      <td>如果你模糊的记得侯选人名字里有个谢字，在睿XX工作，<br/>你的查询条件是:</td> <td><pre>name:谢 company:睿 </pre></td>
+     </tr>
+     <tr class="guide">
+     <td>如果你想找年龄35以下，月薪1万以上的，java工程师，<br/> 你的查询条件是:</td> <td><pre>age:[* TO 35] salary:[10000 TO *] skill_set:java </pre></td>
+     </tr>
+    <tr class="guide">
+      <td>如果你想找任何字段里提到过机械工程的侯选人，<br/>你的查询条件是:</td> <td><pre>机械工程</pre></td>
+    </tr>
+    <tr class="guide">
+    <td>
+     <pre>
+     通过以上的例子，你大概明白可以怎么来查找候选人
+     下面是一些查询里可选的字段名以及表示的意思
+     name:姓名   skill_set:专业技能  age:年龄   salary:收入  
+     career_age:工作年限  resume:简历 company:公司  department:部门
+     region:所在地区  comments:内部评价  creator:记录创建人
+     </pre>
+    <td>
+    </tr>
+    </tbody>
+    </table>
+    </font>
+  </div>
+  
+  <div class="search-bar">
+    <form id="search" action="/search" method="post">
+      请输入搜索条件:
+      <% if(binds.searchText){ %>
+         <input class="search" name="searchText" type="text" value="<%= binds.searchText.trim() %>" maxlength="1000">
+      <% } else { %>
+         <input class="search" name="searchText" type="text" value="" maxlength="1000">
+      <% } %>    
+      <input name="search" type="submit" value="搜索">
+    </form>
+  </div>
+  <div class="result-bar">
+	<% if(binds.searchResult) { %>
+      	<div class="result-summary">
+      	  <ul>
+		 	<li>
+     		记录总数:<%= binds.searchResult.response.numFound || 0 %>条 
+            </li>
+		    <li>
+			查询耗时:<%= binds.searchResult.responseHeader.QTime || 0 %>毫秒 
+	     	</li>
+	        <li>
+		    当前排序:<%= messageMap[currentSort] %>
+			<li>
+		</ul>
+	</div>
+	<% for(var i=0; i < binds.searchResult.response.docs.length; i++) {
+	      //console.log("Iterate:"+i+",total:"+binds.searchResult.response.docs.length);
+	      var record = binds.searchResult.response.docs[i];
+	%>
+		<div class="result-item" sourceid="<%= record._id %>">
+			<div class="result-operation">
+			 <a href="/modify?talentid=<%= record._id %>" target="_blank">编辑</a>
+			</div>
+			<div class="content">
+			<table>
+			<tbody>
+				<tr>
+				 <td>姓名:</td><td><%= record.name || "" %></td>
+				</tr>
+				<tr>
+				 <td>从业年龄:</td><td><%= record.career_age || "" %></td>
+				</tr>
+				<tr>
+				 <td>年龄:</td><td><%= record.age || "" %></td>
+				</tr>
+				<tr>
+				 <td>月薪:</td><td><%= record.salary || "" %></td>
+				</tr>
+				<tr>
+				 <td>现在公司:</td><td><%= record.company || "" %></td>
+				</tr>
+				<tr>
+				 <td>所在地区:</td><td><%= record.region || "" %></td>
+				</tr>
+				<tr>
+				 <td>技能:</td><td><%= record.skill_set || "" %></td>
+				</tr>
+				<tr>
+				 <td>电话:</td><td><%= record.phone || ""%></td>
+				 <td>邮件:</td><td><%=  record.email || "" %></td>
+				</tr>
+				<tr>
+			      <td>毕业学校:</td><td><%= record.school || "" %></td>
+			      <td>学历:</td><td><%= record.diploma || "" %></td>
+				</tr>
+				<tr>
+				  <td>评价:</td>
+				  <td>
+				    <% if(record.comments) { %>
+			  	 	<% for(var ii=0; ii< record.comments.length; ii++) { %>
+			  	 		<%= record.comments[ii] %> <br/>
+			  	 	<% } %>
+			  	 <% } %>
+				  </td>
+				</tr>  
+			</tbody>
+			</table>
+			</div>
+		</div>
+		<% } %>
+
+    <% } %>
+  </div>
+  <div>
+    <% if(binds.nextPage) { %>
+    <a href="<%= binds.nextPage %>">下一页</a>
+    <% } %>
+    &nbsp; &nbsp; &nbsp; 
+    <% if(binds.prevPage) { %>
+    <a href="<%= binds.prevPage %>">上一页</a>
+    <% } %>
+  </div>
+  <div id="debug">
+  </div>
+</div>

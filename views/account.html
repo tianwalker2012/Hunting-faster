@@ -1,0 +1,69 @@
+<div class="modify-area">
+	<form id="account" method="post" action="/account">
+	   	<% if(binds.result && binds.result._id) { %>
+		   <input name="_id" type="hidden" value="<%= binds.result._id %>" />
+		<% } else { %>
+			<input name="_id" type="hidden" value=""/>
+		<% } %>
+		<table>
+			<tbody>
+			    <tr>
+					<td class="title">ID:</td>
+					<td class="input-area">
+					<% if(binds.result) { %><%= binds.result._id || "" %><% } %>
+					</td>
+				</tr>
+				<tr>
+					<td class="title">用户名:</td>
+					<td class="input-area">
+					<input name="name" type="text" maxlength="60" tabindex="1" 
+					  value="<% if(binds.result) { %><%= binds.result.name || "" %><% } %>"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="title">密码:</td>
+					<td class="input-area">
+					<input name="password" type="text" maxlength="60" tabindex="1" 
+					  value="<% if(binds.result) { %><%= binds.result.password || "" %><% } %>"/>
+					</td>
+				</tr>
+				<tr>
+					<td class="title">用户类型:</td>
+					<td class="input-area">
+					<input name="type" type="text" maxlength="60" tabindex="1" 
+					  value="<% if(binds.result) { %><%= binds.result.type || "" %><% } %>"/>
+					</td>
+				</tr>
+				<tr>
+				   <td class="title">创建人:</td>
+				   <td class="input-area">
+					  <% if(binds.result) { %><%= binds.result.creator || "" %><% } %>
+					</td>
+				</tr>
+				<tr>
+				   <td class="title">创建时间:</td>
+				   <td class="input-area">
+					  <% if(binds.result) { %><%= binds.result.created_time || "" %><% } %>
+					</td>
+				</tr>
+				<tr>
+					<td class="title"></td>
+					<td class="input-area">
+					<input type="submit" value="确认" name="submit" class="btn-modify" tabindex="5"/>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</div>
+<div class="info-area">
+	<% if(binds.stored) { %>
+		<% if(binds.errorDetail) { %>
+			保存错误，错误信息：<%= binds.errorDetail %>
+		<% } else { %>
+			保存成功。
+		<% } %>
+	<% } else if(binds.errorDetail) { %>
+			读取错误：<%= binds.errorDetail %>
+	<% } %>
+</div>

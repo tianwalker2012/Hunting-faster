@@ -1,0 +1,166 @@
+<style type="text/css">
+	.search {
+		border:2px inset #F92;
+		width: 480px;
+	}
+	
+	.hover {
+	  background-color: #00dddd;
+	}
+	
+	.interwave {
+	  background-color: #eee	;
+	}
+	
+</style>
+<script type="text/javascript">
+  function debug(env){
+    $("#debug").append("<div>"+env+"</div>");
+  }
+  
+
+  //function goto(page){
+  //  debug("Try to jump to:"+page);	
+  //}
+  $(document).ready(
+  function(){
+    $(".result-item:even").addClass("interwave");
+    <% if(binds.searchResult) { %>
+    debug("document length: <%= binds.searchResult.response.docs.length %>");
+    <% } %>
+ });
+
+ </script>
+ <% //This are server side code, not sure if the it can refer to server side variable or not. Just try
+  var salarySort = binds.salarySort || "asc";
+  var ageSort = binds.ageSort || "asc";
+  var careerAgeSort = binds.careerAgeSort || "asc";
+  var currentCondition = binds.currentCondition || "AND";
+  var currentSort = binds.currentSort || "relative";
+
+  var messageMap = {
+	salarySortAsc: "薪水顺序",
+	salarySortDesc: "薪水倒序",
+	ageSortAsc: "年龄顺序",
+	ageSortDesc: "年龄倒序",
+	careerAgeSortAsc: "职业年龄顺序",
+	careerAgeSortDesc: "职业年龄顺序",
+	relative: "搜索相关性排序"
+  }  
+  %>
+<div class="container">
+  <div class="search-bar">
+    <form id="search" action="/search" method="post">
+      <input name="userId" type="hidden" value="<%= userId %>"> <!--who want to search-->
+      <input name="taskId" type="hidden" value="<%= taskId %>"> <!--for which task-->
+      <input class="search" name="searchText" type="text"
+      value="<% if(binds.searchText){ %>
+          <%= binds.searchText.trim() %>
+      <% }else{ %>
+	  <% } %>"
+      maxlength="1000">
+      <input name="search" type="submit" value="搜索">
+    </form>
+  </div>
+  <div class="result-bar">
+	<% if(binds.searchResult) { %>
+      	<div class="result-summary">
+      	 <table>
+         <tbody id="operations">    
+         <tr>
+		 	<td>
+     		记录总数:<%= binds.searchResult.response.numFound || 0 %>条 
+            </td>
+		    <td>
+			查询耗时:<%= binds.searchResult.responseHeader.QTime || 0 %>毫秒 
+	     	</td>
+	        <td>
+		    当前排序:<%= messageMap[currentSort] %>
+			<td>
+              <a href="<%= binds.salarySortUrl || "#" %>">薪水排序(<% if(currentSort == "salarySortAsc") { %> <%= messageMap.salarySortDesc %> <% }else {%> <%= messageMap.salarySortAsc %> <% } %>) </a>				
+		    </td>
+		    <td>
+	          <a href="<%= binds.ageSortUrl || "#" %>">年龄排序(<% if(currentSort == "ageSortAsc") { %> <%= messageMap.ageSortDesc %> <% }else {%> <%= messageMap.ageSortAsc %> <% } %>) </a>				
+			</td>
+			<td>
+	          <a href="<%= binds.careerAgeSortUrl || "#" %>">薪水排序(<% if(currentSort == "careerAgeSortAsc") { %> <%= messageMap.careerAgeSortDesc %> <% }else {%> <%= messageMap.careerAgeSortAsc %> <% } %>) </a>				
+			</td>
+			<td>
+				<% if (currentSort != "relative") {%>	
+			       <a href="<%= binds.relativeSortUrl || "#" %>">相关性排序(默认)</a>				
+				<% } %>
+			</td>
+		</tr>
+		</tbody>
+		</table>
+	</div>
+	<% for(var i=0; i < binds.searchResult.response.docs.length; i++) {
+	      console.log("Iterate:"+i+",total:"+binds.searchResult.response.docs.length);
+	      var record = binds.searchResult.response.docs[i];
+	%>
+		<div class="result-item" sourceid="<%= record._id %>">
+			<div class="result-operation">
+			 <a href="/modify?talentid=<%= record._id %>">编辑</a>
+			</div>
+			<div class="content">
+			<table>
+			<tbody>
+				<tr>
+				 <td>姓名:</td><td><%= record.name || "" %></td>
+				</tr>
+				<tr>
+				 <td>从业年龄:</td><td><%= record.career_age || "" %></td>
+				</tr>
+				<tr>
+				 <td>年龄:</td><td><%= record.age || "" %></td>
+				</tr>
+				<tr>
+				 <td>月薪:</td><td><%= record.salary || "" %></td>
+				</tr>
+				<tr>
+				 <td>现在公司:</td><td><%= record.company || "" %></td>
+				</tr>
+				<tr>
+				 <td>所在地区:</td><td><%= record.region || "" %></td>
+				</tr>
+				<tr>
+				 <td>技能:</td><td><%= record.skill_set %></td>
+				</tr>
+				<tr>
+				 <td>电话:</td><td><%= record.phone %></td>
+				 <td>邮件:</td><td><%=  record.email %></td>
+				</tr>
+				<tr>
+			      <td>毕业学校:</td><td><%= record.school %></td>
+			      <td>学历:</td><td><%= record.diploma %></td>
+				</tr>
+				<tr>
+				  <td>评价:</td>
+				  <td>
+				    <% if(record.comments) { %>
+			  	 	<% for(var i=0; i< record.comments.length; i++) { %>
+			  	 		<%= record.comments[i] %> <br/>
+			  	 	<% } %>
+			  	 <% } %>
+				  </td>
+				</tr>  
+			</tbody>
+			</table>
+			</div>
+		</div>
+		<% } %>
+
+    <% } %>
+  </div>
+  <div>
+    <% if(binds.nextPage) { %>
+    <a href="<%= binds.nextPage %>">下一页</a>
+    <% } %>
+    &nbsp; &nbsp; &nbsp; 
+    <% if(binds.previousPage) { %>
+    <a href="<%= binds.previousPage %>">上一页</a>
+    <% } %>
+  </div>
+  <div id="debug">
+  </div>
+</div>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+</head>
+<body>
+<div class="introduction">
+  威霆人才管理系统,请在登录后使用。
+</div>
+<form id="login" method="post" action="/login">
+ 
+   <input name="referredUrl" type="hidden" value="<%= binds.referred || "/" %>"/>
+  <table>
+  <tbody>
+  <tr>
+    <td>
+    <label>用户名</label>
+    </td>
+    <td>
+    <input id="email" name="email" type="text" maxlength="60" tabindex="1"/>
+    </td>  
+  </tr>
+  <tr>
+    <td>
+    <label>密码</label>
+    </td>
+    <td>
+    <input id="password" name="password" type="text" maxlength="20" tabindex="2"/>
+    </td>
+  </tr>
+  <tr>
+     <td>
+     </td>
+     <td>
+     <input type="submit" value="登录" name="login" class="btn-submit" tabindex="5"/>
+     </td>
+  </tr>
+  </tbody>
+  </table>
+</form>
+  <div class="info-area">
+  	<% if(binds.error) { %>
+  		<%= binds.error %>
+  	<% } %>
+  </div>
+</body>
+</html>
+

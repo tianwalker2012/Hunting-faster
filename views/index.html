@@ -1,0 +1,135 @@
+<style type="text/css">
+  body {
+  width: 100%;
+  }
+  
+  .odd-background {
+  background-color: #eee;
+  }
+  .selected {
+  background-color: #ddd;
+  }
+
+  .hover {
+  background-color: #00dddd;
+  }
+
+  .container {
+  margin: 0px auto;
+  width: 960px;
+  }
+
+  #header {
+  height: 40px;
+  width: 100%;
+  display: block;
+  }
+  
+  .left-panel {
+  float: left;
+  width: 20%;
+ 
+  }
+
+  .right-panel {
+  float: right;
+  width: 80%;
+  }
+
+  .task-bar {
+  border-bottom: 1px dashed #999;
+  padding: 5px 5px;
+  }
+
+  .talents-bar {
+  border-bottom: 1px dashed #999;
+  padding: 5px 5px;
+  }
+  #debug {
+  clear: both;
+  border: 1px solid #999;
+  }
+  
+</style>
+
+<script type="text/javascript">
+  function debug(env){
+    $("#debug").append("<div>"+env+"</div>");
+  }
+ 
+  function loadTalent(taskid){
+  $.ajax(
+  {url:"/task/talent",
+  type: "POST",
+  dataType: "html/text",
+  timeout: 1000,
+  error: function(){
+  debug("Failed to get id:"+taskid);
+  },
+  success: function(content){
+  $(".talent-container").html(content);
+  $(".talents-bar:odd").addClass("odd-background");
+  }
+  }
+  );
+  } 
+  var initalTaskId = "<%= taskid %>";
+  $(document).ready(
+  function(){
+  $("#"+initalTaskId).addClass("selected");
+  loadTalent(initalTaskId);
+  debug("Added select effect");
+  $(".task-bar").click(function(item){
+  debug("I get clicked");
+  //for(var pm in item){
+  //debug(pm+":"+item[pm]);
+  //}
+   debug("the task id:"+$(item.originalTarget).attr("id"));
+  var taskid = $(item.originalTarget).attr("id");
+  $(".task-bar").toggleClass("selected");
+  loadTalent(taskid);
+  }).hover(function(item){
+  $(item.originalTarget).toggleClass("hover");
+  }, function(item){
+  $(item.originalTarget).toggleClass("hover");
+  });
+  
+  
+  });
+ </script>
+
+<div class="container">
+ <div id="header"> 当前用户: <%= user.name%> <span class="separator"></span> <a href="/logout">退出登录</a>  
+ </div>
+ <div class="left-panel">
+   <% for(var i=0; i< tasks.length; i++) {%>
+      <div class="task-bar" id="<%= tasks[i]._id %>">
+	name:<%= tasks[i].name %> <br>
+	experience:<%= tasks[i].experience %><br>
+	skillset:<%= tasks[i].skillset %><br>
+	salary:<%= tasks[i].salary %><br>
+	job description:<%= tasks[i].job_description %>
+      </div>
+   <% } %>
+ </div>
+ <div class="right-panel">
+   <div class="tool-bar">
+     把一些跟人才相关的工具button放在这里。
+   </div>
+   <div class="talent-container">
+   <% for(var i = 0; i<talents.length; i++){ %>
+      <div class="talents-bar">
+	name:<%= talents[i].name %> <br>
+	age:<%= talents[i].age %> <br>
+	skill:<%= talents[i].skill_set %> <br>
+	served_company:<%= talents[i].served_comany %> <br>
+	title:<%= talents[i].title %><br>
+	resume:<%= talents[i].resume %><br>
+      </div>
+   <% } %>
+   </div>
+ </div>
+ <div id="debug">
+   我是Debug
+ </div>
+</div>

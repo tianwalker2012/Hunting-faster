@@ -1,0 +1,167 @@
+<style type="css/text">
+	table {
+		background-color: #FAF7E4;
+	}
+</style>
+<script type="text/javascript">
+  function debug(env){
+    $("#debug").append("<div>"+env+"</div>");
+  }
+	<% if(binds.modify) {%>
+		var modify = true;
+	<% }else{ %>
+	    var modify = false;
+	<% } %>
+	$(document).ready(
+	function(){
+	    debug("Value of modify:"+modify);
+	    if(!modify){ //Will set all the field to read only, and disable submit button
+			$("input").attr("readonly","true");
+			$(".btn-submit").hide();
+			debug("setup is done");
+		}else{
+			$(".btn-modify").hide();
+		}
+		$(".btn-modify").click(
+			function(target){
+				$("input").removeAttr("readonly");
+			    $(".btn-submit").show();
+			    $(".btn-modify").hide();
+			}
+		);
+	});
+
+</script>
+<div class="modify-area">
+	<form id="modify" method="post" action="/modify">
+	    <% if(binds.result && binds.result._id) { %>
+		   <input name="_id" type="hidden" value="<%= binds.result._id %>" />
+		<% } else { %>
+			<input name="_id" type="hidden" value=""/>
+		<% } %>
+		<table>
+		<tbody class="modify-table">
+		  <tr>
+		    <td class="title">id:</td>
+		    <% if(binds.result && binds.result._id) { %>
+		         <td class="input-area"><%= binds.result._id %></td>
+		    <% } else { %>
+		         <td class="input-area"></td>
+		    <% } %>
+		  </tr>
+		  <tr>
+			<td class="title">姓名:</td><td class="input-area">
+			<input name="name" type="text" maxlength="60" tabindex="1" value="<% if(binds.result) { %><%= binds.result.name || ""%><% } %>"/></td>
+		  </tr>
+		  <tr>
+			<td class="title">地区:</td><td class="input-area"><input name="region" type="text" maxlength="60" tabindex="1" value="<% if(binds.result) { %><%= binds.result.region || "" %><% } %>"/></td>
+		  </tr>
+		  <tr>
+			<td class="title">年龄:</td><td class="input-area"><input name="age" type="text" maxlength="60" tabindex="1" value="<% if(binds.result) { %><%= binds.result.age || ""%><% } %>"/></td>
+		  </tr>
+		  <tr>
+			<td class="title">月薪:</td><td class="input-area"><input name="salary" type="text" maxlength="60" tabindex="1" value="<% if(binds.result) { %><%= binds.result.salary || ""%><% } %>"/></td>
+		  </tr>
+		  <tr>
+			<td class="title">从业时间:</td><td class="input-area"><input name="career_age" type="text" maxlength="60" tabindex="1" value="<% if(binds.result) { %><%= binds.result.career_age || "" %><% } %>"/></td>
+		  </tr>
+		  <tr>
+			<td class="title">职位:</td><td class="input-area"><input name="title" type="text" maxlength="60" tabindex="1" value="<% if(binds.result) { %><%= binds.result.title || ""%><% } %>"/></td>
+		  </tr>
+		  <tr>
+			<td class="title">技能:</td><td class="input-area"><textarea name="skill_set" maxlength="400" cols="60" rows="4" tabindex="1"><% if(binds.result) { %><%= binds.result.skill_set || ""%><% } %></textarea></td>
+		  </tr>
+		  <tr>
+			<td class="title">简历:</td><td class="input-area"><textarea name="resume" maxlength="2000" cols="100" rows="20" tabindex="1"><% if(binds.result) { %><%= binds.result.resume || ""%><% } %></textarea></td>
+		  </tr>
+		  <tr>
+			<td class="title">公司名:</td><td class="input-area"><input name="company" type="text" maxlength="60" tabindex="1" value="<% if(binds.result) { %><%= binds.result.company || ""%><% } %>"/></td>
+		  </tr>
+		  <tr>
+			<td class="title">部门:</td><td class="input-area"><input name="department" type="text" maxlength="200" tabindex="1" value="<% if(binds.result) { %><%= binds.result.department || ""%><% } %>"/></td>
+		  </tr>
+		   <tr>
+			<td class="title">电话:</td><td class="input-area"><input name="phone" type="text" maxlength="60" tabindex="1" value="<% if(binds.result) { %><%= binds.result.phone || ""%><% } %>"/></td>
+		  </tr>
+		  <tr>
+			<td class="title">E-Mail:</td><td class="input-area"><input name="email" type="text" maxlength="60" tabindex="1" value="<% if(binds.result) { %><%= binds.result.email || ""%><% } %>"/></td>
+		  </tr>
+		  <tr>
+			<td class="title">公司地址:</td><td class="input-area"><input name="work_address" type="text" maxlength="200" tabindex="1" value="<% if(binds.result) { %><%= binds.result.work_address || ""%><% } %>"/></td>
+		  </tr>
+		  <tr>
+			<td class="title">家庭地址:</td><td class="input-area"><input name="home_address" type="text" maxlength="200" tabindex="1" value="<% if(binds.result) { %><%= binds.result.home_address || ""%><% } %>"/></td>
+		  </tr>
+		  <tr>
+			<td class="title">毕业学校:</td><td class="input-area"><input name="school" type="text" maxlength="200" tabindex="1" value="<% if(binds.result) { %><%= binds.result.school || ""%><% } %>"/></td>
+		  </tr>
+		  <tr>
+			<td class="title">学历:</td><td class="input-area"><input name="diploma" type="text" maxlength="200" tabindex="1" value="<% if(binds.result) { %><%= binds.result.diploma || ""%><% } %>"/></td>
+		  </tr>
+	      <tr>
+			<td class="title">已有评价:</td>
+			<td class="input-area">
+			  <% if(binds.result) { %>
+			    <% if(binds.result.comments) { %>
+			  	 	<% for(var i=0; i< binds.result.comments.length; i++) { %>
+			  	 		<%= binds.result.comments[i] %> <br/>
+			  	 	<% } %>
+			  	 <% } %>
+			  <% } %>
+			
+			</td>
+		  </tr>
+		  <tr>
+			<td class="title">评价:</td><td class="input-area"><textarea name="comments" maxlength="100" cols="60" rows="1" tabindex="1"></textarea></td>
+		  </tr>
+		  <tr>
+		  	<td class="title">更新记录：</td>
+		  	<td class="input-area">
+		  	          <% if(binds.result && binds.result.creator){ %>
+		  	             <div class="track-record">
+                           创建人:<%= binds.result.creator %> &nbsp;&nbsp;&nbsp; 创建时间:<%= binds.result.created_time %>
+                         </div>
+                      <% } %>
+                      <% if(binds.result && binds.result.updated_time) { %>
+                         <div class="track-record">
+                           更新时间:<%= binds.result.updated_time %> 
+                         </div>
+                      <% } %>
+                      <% if(binds.result && binds.result.changer){
+                           for(var i=0;i < binds.result.changer.length; i++) { %>
+                           <div class="track-record">
+                           修改人:<%= binds.result.changer[i] %> &nbsp;&nbsp;&nbsp; 修改时间:<%= binds.result.changer_history[i] %> <br/>
+                           </div>
+                     <%  } } %>
+
+		  	</td>
+		  </tr>
+		  <tr>
+			<td class="title"></td> 
+			<td class="input-area"><input type="submit" value="提交" name="submit" class="btn-submit" tabindex="5"/>
+			<input type="button" value="编辑" name="submit" class="btn-modify" tabindex="5"/>
+			</td>
+		  </tr>
+		<tbody>
+		</table>
+	</form>
+</div>
+<div class="info-area">
+	<% if(binds.stored) { %>
+		<% if(binds.errorDetail) { %>
+		   保存出错，赶紧联系天哥，错误详情:<%= binds.errorDetail %> <br/>
+		<% } else { %>
+		   保存成功！<br/>
+		<% } %>
+		
+		<% if(binds.statusCode) { %>
+			索引状态码: <%= binds.statusCode %> <br/>
+		<% } %>
+		
+		<% if(binds.indexResult) { %>
+		    索引状态信息: <%= binds.indexResult %> <br/>
+		<% } %>
+	<% } %>
+</div>
+<div id="debug">
+</div>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+</head>
+<style type="text/css">
+	ul {
+		display: block;
+		list-style-type: disc;
+	}
+	li {
+	    display: inline;
+	    padding-right: 10px;
+	}
+</style>
+<body>
+  <div id="header">
+    <ul class="nav-toolbar">
+    	<li><a href="/">回首页</a></li>
+    	<li><a href="/modify">添加人才</a></li>
+    	<li><a href="/logout">退出登录</a></li>
+    	<% if(binds.user) { %>
+			<li><a href="/account?eid=<%= binds.user._id %>"><%= binds.user.name %></a></li>
+    	<% } %>
+    	<% if(binds.user && binds.user.type === "admin") { %>
+    		<li><a href="/account">添加员工</a></li>
+    	<% } %>
+    </ul>
+  </div>
+  <%- body %>
+</body>
+</html>
