@@ -5,6 +5,8 @@ var taskManager = require("./taskoperation").taskManager;
 var configure = require("./configure").configure;
 var submithandler = require("./submithandler").submithandler;
 var solrutil = require("./solrutil").solrutil;
+var exec = require('child_process').exec;
+//var form = require('connect-form');
 //Is this a good idea to maintain a global open database here? give a shot see where it goes. Enjoy
 var mongoer = require("./mongonize");
 var mongonizer = new mongoer.mongonizer("127.0.0.1",27017,"hr_system");
@@ -12,7 +14,7 @@ var mongonizer = new mongoer.mongonizer("127.0.0.1",27017,"hr_system");
 
 var app = express.createServer(
 					  express.logger(),
-					  express.bodyParser(),
+					  express.bodyParser({uploadDir:"/tmp"}),
 					  express.cookieParser()
 );
 app.register(".html", require("ejs"));
@@ -24,6 +26,7 @@ app.configure(
 	      function(){
 		  app.use(app.router);
 		  app.use("/public",express.static(__dirname + "/public"));
+		  app.use("/download",express.static(__dirname+"/download"));
 		  app.use(
 			  express.errorHandler(
 					       {
@@ -161,6 +164,8 @@ app.post("/modify", function(req, res){
 	 modify = true;
 	 console.log("Modify parameter:"+ modify);
      if(!req.body._id){
+        console.log("files json:"+JSON.stringify(req.files));
+        req.body.attached_resume = req.files.upload.name;
      	var converted = submithandler.convert(configure.converttemplate, req.body, {creator: user.name, created_time: new Date()});
 	 	mongonizer.store(converted, function(err, stored){
 	 		var binds = {modify: modify, stored: true, user:user};
@@ -170,11 +175,17 @@ app.post("/modify", function(req, res){
 	 		}else{
 	 	  		binds.result = stored;
 	 		}
+	 		
 	 		console.log("Stored:"+JSON.stringify(stored));
 	 		solrutil.createIndex([stored],function(statusCode, indexResult){
 	 		  binds.statusCode = statusCode;
 	 		  binds.indexResult = indexResult;
-	 		  res.render("modify.html",{binds:binds});
+	 		  var cmd = "mv "+req.files.upload.path+" "+configure.uploadStoredDir+req.files.upload.name;
+	 		  exec(cmd, function(err, stdout, stderr){
+	 		  	console.log("error:"+err+",stdout:"+stdout+",stderr:"+stderr);
+	 		  	res.render("modify.html",{binds:binds});	 		  	
+	 		  });
+
 	 		});
 	  	},"talents");
 	 }else{
@@ -196,7 +207,7 @@ app.post("/modify", function(req, res){
 	 			fetched.changer_history = [];
 	 		}
 	 		fetched.changer_history.push(new Date());
-	 		
+	 		req.body.attached_resume = req.files.upload.name;
 	 		var converted = submithandler.convert(configure.converttemplate, req.body, fetched);
 	 		console.log("For converted:"+JSON.stringify(converted));
 	 	    mongonizer.store(converted, function(err, stored){
@@ -211,7 +222,12 @@ app.post("/modify", function(req, res){
 	 			solrutil.createIndex([stored],function(statusCode, indexResult){
 	 		  		binds.statusCode = statusCode;
 	 		  		binds.indexResult = indexResult;
-	 		  		res.render("modify.html",{binds:binds});
+	 		  		var cmd = "mv "+req.files.upload.path+" "+configure.uploadStoredDir+req.files.upload.name;
+	 		        exec(cmd, function(err, stdout, stderr){
+	 		  	       console.log("error:"+err+",stdout:"+stdout+",stderr:"+stderr);
+	 		  	       res.render("modify.html",{binds:binds});	 		  	
+	 		        });
+	 		  		
 	 			});
 	  		},"talents");
 	 		
@@ -354,6 +370,17 @@ app.post("/login", function(req, res){
 	    });
 });
 
+app.get("/upload", function(req, res){
+	res.render("upload.html",{binds:{}});
+});
+
+app.post("/upload", function(req, res){
+	//res.send("Body:"+JSON.stringify(req.headers));
+	console.log("upload post get called, header:"+JSON.stringify(req.headers));
+	console.log("upload files:"+JSON.stringify(req.files));
+	console.log("upload parameters:"+JSON.stringify(req.body));
+	console.log("upload method quit");
+});
 
 app.get("/solr/update/json", function(req, res){
     login(req, res, function(req, res, user){

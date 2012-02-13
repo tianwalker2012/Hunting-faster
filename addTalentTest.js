@@ -168,6 +168,15 @@ mongonizer.find({_id:"4f279522ef90d6cd13000001"}, function(res){
 	console.log(JSON.stringify(res));
 }, "talents");
 }
+
+console.log("coolguy indexOf guy Result:"+ ~"coolguy".indexOf("cut"));
+if("coolguy".indexOf("cool")){
+	console.log("coolguy ~indexOf cool is true");
+}else{
+ 	console.log("coolguy ~indexOf cool is false");
+}
+
+
 //storeTest();
 //testFindOne();
 //mongonizer.find({}, )

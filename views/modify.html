@@ -33,7 +33,7 @@
 
 </script>
 <div class="modify-area">
-	<form id="modify" method="post" action="/modify">
+	<form id="modify" method="post" action="/modify" enctype="multipart/form-data">
 	    <% if(binds.result && binds.result._id) { %>
 		   <input name="_id" type="hidden" value="<%= binds.result._id %>" />
 		<% } else { %>
@@ -70,6 +70,22 @@
 		  </tr>
 		  <tr>
 			<td class="title">技能:</td><td class="input-area"><textarea name="skill_set" maxlength="400" cols="60" rows="4" tabindex="1"><% if(binds.result) { %><%= binds.result.skill_set || ""%><% } %></textarea></td>
+		  </tr>
+		   <tr>
+			<td class="title">已有简历附件:</td>
+			<td class="input-area">
+			  <% if(binds.result) { %>
+			    <% if(binds.result.attached_resume) { %>
+			  	 	<% for(var i=0; i< binds.result.attached_resume.length; i++) { %>
+			  	 		<a href="/download/<%= binds.result.attached_resume[i] %>"><%= binds.result.attached_resume[i] %> <br/>
+			  	 	<% } %>
+			  	 <% } %>
+			  <% } %>
+			</td>
+		  </tr>
+		  <tr>
+		    <td class="title">上传简历附件:</td>
+		    <td><input type="file" name="upload"/></td>
 		  </tr>
 		  <tr>
 			<td class="title">简历:</td><td class="input-area"><textarea name="resume" maxlength="2000" cols="100" rows="20" tabindex="1"><% if(binds.result) { %><%= binds.result.resume || ""%><% } %></textarea></td>

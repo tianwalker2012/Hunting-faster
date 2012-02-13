@@ -35,6 +35,16 @@
     //<% if(binds.searchResult) { %>
     //debug("document length: <%= binds.searchResult.response.docs.length %>");
     //<% } %>
+    $(".introduce").hide();
+    $(".showguide").click(function(target){
+        debug("clicked:"+$(".introduce").is(":hidden"));
+    	if($(".introduce").is(":hidden")){
+            debug("SlideDown get called");
+    		$("introduce").show("fast");
+    	}else{
+    	  	$("introduce").slideUp();
+    	}
+    });
  });
 
  </script>
@@ -56,6 +66,7 @@
   }  
   %>
 <div class="container">
+  <a class="showguide" href="#">使用帮助</a>
   <div class="introduce">
     <font size="4">
      <table>
@@ -126,6 +137,15 @@
 			<li>
 		</ul>
 	</div>
+	<div>
+    <% if(binds.nextPage) { %>
+    <a href="<%= binds.nextPage %>">下一页</a>
+    <% } %>
+    &nbsp; &nbsp; &nbsp; 
+    <% if(binds.prevPage) { %>
+    <a href="<%= binds.prevPage %>">上一页</a>
+    <% } %>
+   </div>
 	<% for(var i=0; i < binds.searchResult.response.docs.length; i++) {
 	      //console.log("Iterate:"+i+",total:"+binds.searchResult.response.docs.length);
 	      var record = binds.searchResult.response.docs[i];

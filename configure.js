@@ -11,6 +11,7 @@ configure.solrquery = "/solr/select/?wt=json&version=2.2&indent=on&";
 configure.solrupdatejson = "/solr/update/json?commit=true&wt=json";
 //The generated index file will be stored in this folder and will upload to 
 configure.solrxmlfolder = "/Users/xietian/solrindex/";
+configure.uploadStoredDir = "/Users/xietian/work_foot/hunting/download/";
 
 //For any remote access request, if error encountered before request get to the server like DNS, TCP, etc... System will use 999 as it's 
 //StatusCode, so that application callback can do something about it. Why I feel so much better to work under the IDE, even it is just a text inputs IDE.
@@ -39,6 +40,7 @@ configure.converttemplate = {
   phone: "string",
   changer: "stringlist",
   changer_history: "datelist",
+  attached_resume: "stringlist",
   creator: "string",
   created_time: "date",
   updated_time: "date"
