@@ -17,7 +17,7 @@ configure.uploadStoredDir = __dirname+"/download/";
 //StatusCode, so that application callback can do something about it. Why I feel so much better to work under the IDE, even it is just a text inputs IDE.
 //You need a work bench which you can enjoy you coding life.  
 configure.tcperror = 999;
-configure.numberPerPage = 2;
+configure.numberPerPage = 20;
 
 //This template was used to convert the target parameter into the type specified in this template.
 configure.converttemplate = {

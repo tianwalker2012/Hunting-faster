@@ -35,7 +35,7 @@
     //<% if(binds.searchResult) { %>
     //debug("document length: <%= binds.searchResult.response.docs.length %>");
     //<% } %>
-    $(".introduce").hide();
+    //$(".introduce").hide();
     $(".showguide").click(function(target){
         debug("clicked:"+$(".introduce").is(":hidden"));
     	if($(".introduce").is(":hidden")){
@@ -66,51 +66,7 @@
   }  
   %>
 <div class="container">
-  <a class="showguide" href="#">使用帮助</a>
-  <div class="introduce">
-    <font size="4">
-     <table>
-     <tbody>
-     <tr class="guide">
-      <td>查询功能使用的例子</td> <td></td>
-     </tr>
-     <tr class="guide">
-     <td>如果你要找技能里会c++的人</td><td><pre>skill_set:c++<pre></td> 
-     </tr>
-     <tr class="guide">
-     <td>如果你要找同时会c++,java的人你的查询条件是：</td> <td><pre>skill_set:c++   skill_set:java</pre> </td>
-     </tr>
-     <tr class="guide">
-      <td>如果你的条件是c++或是java随便会一样就可以<br/>那你的查询条件是:</td> <td><pre>skill_set:c++  OR  skill_set:java</pre></td>
-      </tr>
-     <tr class="guide">
-     <td>如果你想找年龄35以上，在百度工作，java，程序员<br/>你的查询条件是:</td> <td><pre>age:[35 TO *] company:百度 title:程序员 skill_set:java </pre></td>
-     </tr>
-     <tr class="guide">
-      <td>如果你模糊的记得侯选人名字里有个谢字，在睿XX工作，<br/>你的查询条件是:</td> <td><pre>name:谢 company:睿 </pre></td>
-     </tr>
-     <tr class="guide">
-     <td>如果你想找年龄35以下，月薪1万以上的，java工程师，<br/> 你的查询条件是:</td> <td><pre>age:[* TO 35] salary:[10000 TO *] skill_set:java </pre></td>
-     </tr>
-    <tr class="guide">
-      <td>如果你想找任何字段里提到过机械工程的侯选人，<br/>你的查询条件是:</td> <td><pre>机械工程</pre></td>
-    </tr>
-    <tr class="guide">
-    <td>
-     <pre>
-     通过以上的例子，你大概明白可以怎么来查找候选人
-     下面是一些查询里可选的字段名以及表示的意思
-     name:姓名   skill_set:专业技能  age:年龄   salary:收入  
-     career_age:工作年限  resume:简历 company:公司  department:部门
-     region:所在地区  comments:内部评价  creator:记录创建人
-     </pre>
-    <td>
-    </tr>
-    </tbody>
-    </table>
-    </font>
-  </div>
-  
+ 
   <div class="search-bar">
     <form id="search" action="/search" method="post">
       请输入搜索条件:
@@ -212,6 +168,50 @@
     <% if(binds.prevPage) { %>
     <a href="<%= binds.prevPage %>">上一页</a>
     <% } %>
+  </div>
+
+ <div class="introduce">
+    <font size="4">
+     <table>
+     <tbody>
+     <tr class="guide">
+      <td>查询功能使用的例子</td> <td></td>
+     </tr>
+     <tr class="guide">
+     <td>如果你要找技能里会c++的人</td><td><pre>skill_set:c++<pre></td> 
+     </tr>
+     <tr class="guide">
+     <td>如果你要找同时会c++,java的人你的查询条件是：</td> <td><pre>skill_set:c++   skill_set:java</pre> </td>
+     </tr>
+     <tr class="guide">
+      <td>如果你的条件是c++或是java随便会一样就可以<br/>那你的查询条件是:</td> <td><pre>skill_set:c++  OR  skill_set:java</pre></td>
+      </tr>
+     <tr class="guide">
+     <td>如果你想找年龄35以上，在百度工作，java，程序员<br/>你的查询条件是:</td> <td><pre>age:[35 TO *] company:百度 title:程序员 skill_set:java </pre></td>
+     </tr>
+     <tr class="guide">
+      <td>如果你模糊的记得侯选人名字里有个谢字，在睿XX工作，<br/>你的查询条件是:</td> <td><pre>name:谢 company:睿 </pre></td>
+     </tr>
+     <tr class="guide">
+     <td>如果你想找年龄35以下，月薪1万以上的，java工程师，<br/> 你的查询条件是:</td> <td><pre>age:[* TO 35] salary:[10000 TO *] skill_set:java </pre></td>
+     </tr>
+    <tr class="guide">
+      <td>如果你想找任何字段里提到过机械工程的侯选人，<br/>你的查询条件是:</td> <td><pre>机械工程</pre></td>
+    </tr>
+    <tr class="guide">
+    <td>
+     <pre>
+     通过以上的例子，你大概明白可以怎么来查找候选人
+     下面是一些查询里可选的字段名以及表示的意思
+     name:姓名   skill_set:专业技能  age:年龄   salary:收入  
+     career_age:工作年限  resume:简历 company:公司  department:部门
+     region:所在地区  comments:内部评价  creator:记录创建人
+     </pre>
+    <td>
+    </tr>
+    </tbody>
+    </table>
+    </font>
   </div>
   <div id="debug">
   </div>

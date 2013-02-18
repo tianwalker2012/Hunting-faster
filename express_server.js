@@ -265,6 +265,7 @@ function search(req, res){
 	   //res.send(data);
 	  	var resultObj = null;
       	if(code == 200){
+                        console.log("Returned data:"+data);
 	  		resultObj = JSON.parse(data);
 	  	}
 	  	if(!resultObj){ //If no result for this query.
@@ -423,3 +424,4 @@ app.get("/remote", function(req, res){
 });
 
 app.listen(8888);
+console.log("Listen to 8888");

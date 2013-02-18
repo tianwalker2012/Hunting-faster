@@ -64,8 +64,12 @@ solrutil.query = function(query, next){
 	var httpreq = require("http").request(options,
 			function(resp){
 				console.log("status code:"+resp.statusCode+",headers:"+JSON.stringify(resp.headers));
+				var output = '';
 				resp.on("data", function(chunk){
-						next(resp.statusCode, chunk);
+					output += chunk;
+				});
+                                resp.on("end", function(){
+					next(resp.statusCode, output);
 				});
 			});
 	httpreq.on("error", function(e){
